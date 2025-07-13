@@ -1,0 +1,106 @@
+spring:
+  application:
+    name: seekly-search
+
+  # Database configuration
+  datasource:
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/seekly_search}
+    username: ${POSTGRES_USERNAME:postgres}
+    password: ${POSTGRES_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+
+  # JPA configuration
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+# Seekly search engine configuration
+seekly:
+  search:
+    postgres:
+      enabled: true
+      entity-type: product
+      lucene-index-path: ./index/products
+      max-pool-size: 20
+      min-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      enable-metrics: true
+      enable-query-performance: true
+      auto-optimize-threshold: 1000
+      enable-auto-optimization: true
+
+      # Prometheus metrics configuration
+      prometheus:
+        enabled: true
+        metrics-prefix: seekly_search
+        include-jvm-metrics: true
+        include-system-metrics: true
+        collection-interval-seconds: 15
+
+      # Health check configuration
+      health-check:
+        enabled: true
+        timeout-ms: 5000
+        interval-ms: 30000
+
+    # Lucene fallback configuration
+    lucene:
+      enabled: false
+      entity-type: product
+      index-path: ./index/lucene_products
+
+# Server configuration
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+# Actuator configuration for monitoring
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    tags:
+      application: ${spring.application.name}
+      environment: ${ENVIRONMENT:development}
+
+# Logging configuration
+logging:
+  level:
+    com.h12.seekly: INFO
+    org.apache.lucene: WARN
+    com.zaxxer.hikari: INFO
+    org.springframework.web: INFO
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n'
+    file: '%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n'
+  file:
+    name: logs/seekly-search.log
+    max-size: 100MB
+    max-history: 30
+
+# Prometheus configuration
+prometheus:
+  enabled: true
+  port: 8080
+  path: /actuator/prometheus
