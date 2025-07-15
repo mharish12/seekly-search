@@ -1,4 +1,4 @@
 rootProject.name = 'seekly-search'
 
-include 'seekly-search-core'
-include 'seekly-search-examples' 
+include 'seekly-search-lucene-core'
+include 'seekly-search-lucene-examples'

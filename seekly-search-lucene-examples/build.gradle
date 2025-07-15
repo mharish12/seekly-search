@@ -7,7 +7,7 @@ plugins {
 
 dependencies {
     // Core framework dependency
-    implementation project(':seekly-search-core')
+    implementation project(':seekly-search-lucene-core')
     
     // Additional dependencies for examples
     implementation 'org.springframework.boot:spring-boot-starter-web:3.5.3'

@@ -13,6 +13,16 @@ dependencies {
     api 'org.springframework.boot:spring-boot-starter-actuator:3.5.3'
     api 'org.springframework.boot:spring-boot-starter-validation:3.5.3'
     api 'org.springframework.boot:spring-boot-configuration-processor:3.5.3'
+
+    // Search and indexing
+    api 'org.apache.lucene:lucene-core:10.2.2'
+    api 'org.apache.lucene:lucene-analyzers-common:8.11.4'
+    api group: 'org.apache.lucene', name: 'lucene-queryparser', version: '10.2.2'
+    api 'org.apache.lucene:lucene-highlighter:10.2.2'
+
+    // PostgreSQL
+    api 'org.postgresql:postgresql:42.7.1'
+    api 'com.zaxxer:HikariCP:5.1.0'
     
     // Metrics and monitoring
     api 'io.micrometer:micrometer-core:1.12.0'
