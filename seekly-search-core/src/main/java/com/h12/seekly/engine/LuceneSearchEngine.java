@@ -10,7 +10,6 @@ import org.apache.lucene.search.*;
 //import org.apache.lucene.search.highlight.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.BytesRef;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -209,12 +208,12 @@ public class LuceneSearchEngine<T extends SearchableEntity> implements SearchEng
     }
 
     @Override
-    public Optional<SearchMetrics> getSearchMetrics(String query) {
+    public Optional<SearchMetric> getSearchMetrics(String query) {
         return Optional.ofNullable(metricsTracker.getMetrics(query));
     }
 
     @Override
-    public List<SearchMetrics> getSearchMetrics(String entityType, LocalDateTime from, LocalDateTime to) {
+    public List<SearchMetric> getSearchMetrics(String entityType, LocalDateTime from, LocalDateTime to) {
         return metricsTracker.getMetrics(entityType, from, to);
     }
 
@@ -433,7 +432,7 @@ public class LuceneSearchEngine<T extends SearchableEntity> implements SearchEng
     }
 
     private void trackSearchMetrics(SearchResponse<T> response, SearchOptions options) {
-        SearchMetrics metrics = SearchMetrics.builder()
+        SearchMetric metrics = SearchMetric.builder()
                 .query(response.getQuery())
                 .entityType(response.getEntityType())
                 .totalHits(response.getTotalHits())

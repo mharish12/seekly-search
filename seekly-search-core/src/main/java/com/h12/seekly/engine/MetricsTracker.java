@@ -1,6 +1,6 @@
 package com.h12.seekly.engine;
 
-import com.h12.seekly.core.SearchMetrics;
+import com.h12.seekly.core.SearchMetric;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
@@ -14,14 +14,14 @@ import java.util.stream.Collectors;
 @Slf4j
 public class MetricsTracker {
 
-    private final Map<String, SearchMetrics> metricsByQuery = new ConcurrentHashMap<>();
-    private final Map<String, List<SearchMetrics>> metricsByEntityType = new ConcurrentHashMap<>();
-    private final Map<LocalDateTime, List<SearchMetrics>> metricsByTime = new ConcurrentHashMap<>();
+    private final Map<String, SearchMetric> metricsByQuery = new ConcurrentHashMap<>();
+    private final Map<String, List<SearchMetric>> metricsByEntityType = new ConcurrentHashMap<>();
+    private final Map<LocalDateTime, List<SearchMetric>> metricsByTime = new ConcurrentHashMap<>();
 
     /**
      * Track search metrics for a specific query
      */
-    public void trackMetrics(SearchMetrics metrics) {
+    public void trackMetrics(SearchMetric metrics) {
         String query = metrics.getQuery();
         String entityType = metrics.getEntityType();
         LocalDateTime timestamp = metrics.getTimestamp();
@@ -42,29 +42,29 @@ public class MetricsTracker {
     /**
      * Get metrics for a specific query
      */
-    public SearchMetrics getMetrics(String query) {
+    public SearchMetric getMetrics(String query) {
         return metricsByQuery.get(query);
     }
 
     /**
      * Get metrics for a specific entity type within a time range
      */
-    public List<SearchMetrics> getMetrics(String entityType, LocalDateTime from, LocalDateTime to) {
-        List<SearchMetrics> entityMetrics = metricsByEntityType.getOrDefault(entityType, Collections.emptyList());
+    public List<SearchMetric> getMetrics(String entityType, LocalDateTime from, LocalDateTime to) {
+        List<SearchMetric> entityMetrics = metricsByEntityType.getOrDefault(entityType, Collections.emptyList());
 
         return entityMetrics.stream()
                 .filter(metrics -> {
                     LocalDateTime timestamp = metrics.getTimestamp();
                     return !timestamp.isBefore(from) && !timestamp.isAfter(to);
                 })
-                .sorted(Comparator.comparing(SearchMetrics::getTimestamp))
+                .sorted(Comparator.comparing(SearchMetric::getTimestamp))
                 .collect(Collectors.toList());
     }
 
     /**
      * Get metrics within a time range
      */
-    public List<SearchMetrics> getMetrics(LocalDateTime from, LocalDateTime to) {
+    public List<SearchMetric> getMetrics(LocalDateTime from, LocalDateTime to) {
         return metricsByTime.entrySet().stream()
                 .filter(entry -> {
                     LocalDateTime bucketTime = entry.getKey();
@@ -75,7 +75,7 @@ public class MetricsTracker {
                     LocalDateTime timestamp = metrics.getTimestamp();
                     return !timestamp.isBefore(from) && !timestamp.isAfter(to);
                 })
-                .sorted(Comparator.comparing(SearchMetrics::getTimestamp))
+                .sorted(Comparator.comparing(SearchMetric::getTimestamp))
                 .collect(Collectors.toList());
     }
 
@@ -84,7 +84,7 @@ public class MetricsTracker {
      */
     public List<String> getTopQueries(String entityType, int limit) {
         return metricsByEntityType.getOrDefault(entityType, Collections.emptyList()).stream()
-                .collect(Collectors.groupingBy(SearchMetrics::getQuery, Collectors.counting()))
+                .collect(Collectors.groupingBy(SearchMetric::getQuery, Collectors.counting()))
                 .entrySet().stream()
                 .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
                 .limit(limit)
@@ -97,8 +97,8 @@ public class MetricsTracker {
      */
     public List<String> getZeroResultQueries(String entityType, int limit) {
         return metricsByEntityType.getOrDefault(entityType, Collections.emptyList()).stream()
-                .filter(SearchMetrics::isZeroResults)
-                .collect(Collectors.groupingBy(SearchMetrics::getQuery, Collectors.counting()))
+                .filter(SearchMetric::isZeroResults)
+                .collect(Collectors.groupingBy(SearchMetric::getQuery, Collectors.counting()))
                 .entrySet().stream()
                 .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
                 .limit(limit)
@@ -110,14 +110,14 @@ public class MetricsTracker {
      * Get average search time for a specific entity type
      */
     public double getAverageSearchTime(String entityType) {
-        List<SearchMetrics> entityMetrics = metricsByEntityType.getOrDefault(entityType, Collections.emptyList());
+        List<SearchMetric> entityMetrics = metricsByEntityType.getOrDefault(entityType, Collections.emptyList());
 
         if (entityMetrics.isEmpty()) {
             return 0.0;
         }
 
         return entityMetrics.stream()
-                .mapToLong(SearchMetrics::getSearchTimeMs)
+                .mapToLong(SearchMetric::getSearchTimeMs)
                 .average()
                 .orElse(0.0);
     }
@@ -149,7 +149,7 @@ public class MetricsTracker {
     /**
      * Get all metrics
      */
-    public List<SearchMetrics> getAllMetrics() {
+    public List<SearchMetric> getAllMetrics() {
         return new ArrayList<>(metricsByQuery.values());
     }
 

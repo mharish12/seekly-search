@@ -17,7 +17,7 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SearchMetrics {
+public class SearchMetric {
 
     /**
      * Query that was executed

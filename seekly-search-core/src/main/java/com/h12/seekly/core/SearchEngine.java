@@ -59,12 +59,12 @@ public interface SearchEngine<T extends SearchableEntity> {
     /**
      * Get search metrics for a specific query
      */
-    Optional<SearchMetrics> getSearchMetrics(String query);
+    Optional<SearchMetric> getSearchMetrics(String query);
 
     /**
      * Get aggregated search metrics for a time period
      */
-    List<SearchMetrics> getSearchMetrics(String entityType, LocalDateTime from, LocalDateTime to);
+    List<SearchMetric> getSearchMetrics(String entityType, LocalDateTime from, LocalDateTime to);
 
     /**
      * Get top performing queries

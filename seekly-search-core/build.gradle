@@ -1,18 +1,18 @@
 plugins {
     id 'java-library'
-    id 'org.springframework.boot' version '3.2.0'
+    id 'org.springframework.boot' version '3.5.3'
     id 'io.spring.dependency-management' version '1.1.4'
     id 'maven-publish'
 }
 
 dependencies {
     // Spring Boot
-    api 'org.springframework.boot:spring-boot-starter:3.2.0'
-    api 'org.springframework.boot:spring-boot-starter-web:3.2.0'
-    api 'org.springframework.boot:spring-boot-starter-data-jpa:3.2.0'
-    api 'org.springframework.boot:spring-boot-starter-actuator:3.2.0'
-    api 'org.springframework.boot:spring-boot-starter-validation:3.2.0'
-    api 'org.springframework.boot:spring-boot-configuration-processor:3.2.0'
+    api 'org.springframework.boot:spring-boot-starter:3.5.3'
+    api 'org.springframework.boot:spring-boot-starter-web:3.5.3'
+    api 'org.springframework.boot:spring-boot-starter-data-jpa:3.5.3'
+    api 'org.springframework.boot:spring-boot-starter-actuator:3.5.3'
+    api 'org.springframework.boot:spring-boot-starter-validation:3.5.3'
+    api 'org.springframework.boot:spring-boot-configuration-processor:3.5.3'
     
     // Metrics and monitoring
     api 'io.micrometer:micrometer-core:1.12.0'
@@ -23,8 +23,8 @@ dependencies {
     api 'io.prometheus:simpleclient_httpserver:0.16.0'
     
     // Testing
-    testImplementation 'org.springframework.boot:spring-boot-starter-test:3.2.0'
-    testImplementation 'org.springframework.boot:spring-boot-testcontainers:3.2.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:3.5.3'
+    testImplementation 'org.springframework.boot:spring-boot-testcontainers:3.5.3'
 }
 
 // Publishing configuration
@@ -47,9 +47,9 @@ publishing {
                 
                 developers {
                     developer {
-                        id = 'your-id'
-                        name = 'Your Name'
-                        email = 'your.email@example.com'
+                        id = 'mharish12'
+                        name = 'Harish Madineni'
+                        email = 'harishmadineni1@gmail.com'
                     }
                 }
             }
@@ -66,4 +66,8 @@ publishing {
             }
         }
     }
-} 
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

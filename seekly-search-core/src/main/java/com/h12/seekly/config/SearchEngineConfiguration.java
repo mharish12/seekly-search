@@ -32,7 +32,7 @@ public class SearchEngineConfiguration {
      */
     @Bean
     @ConditionalOnProperty(name = "seekly.search.postgres.prometheus.enabled", havingValue = "true", matchIfMissing = true)
-    public MeterRegistry meterRegistry(MeterRegistry meterRegistry, @Qualifier("springPostgresSearchConfig") SpringPostgresSearchConfig config) {
+    public MeterRegistry meterRegistry(MeterRegistry meterRegistry, SpringPostgresSearchConfig config) {
 
         if (config.getPrometheus().isEnabled()) {
             CollectorRegistry collectorRegistry = new CollectorRegistry();
@@ -54,7 +54,7 @@ public class SearchEngineConfiguration {
     @Bean
     @ConditionalOnProperty(name = "seekly.search.postgres.enable-metrics", havingValue = "true", matchIfMissing = true)
     public SearchMetricsCollector searchMetricsCollector(MeterRegistry meterRegistry,
-                                                         @Qualifier("springPostgresSearchConfig") SpringPostgresSearchConfig config) {
+                                                         SpringPostgresSearchConfig config) {
         String metricsPrefix = config.getPrometheus().getMetricsPrefix();
         return new SearchMetricsCollector(meterRegistry, metricsPrefix);
     }
@@ -65,7 +65,7 @@ public class SearchEngineConfiguration {
     @Bean
     @ConditionalOnProperty(name = "seekly.search.postgres.enabled", havingValue = "true", matchIfMissing = true)
     public <T extends SearchableEntity> SearchEngine<T> postgresSearchEngine(
-            @Qualifier("springPostgresSearchConfig") SpringPostgresSearchConfig config) throws IOException {
+            SpringPostgresSearchConfig config) throws IOException {
 
         log.info("Creating PostgreSQL search engine for entity type: {}", config.getEntityType());
 
@@ -79,7 +79,7 @@ public class SearchEngineConfiguration {
     @Bean
     @ConditionalOnProperty(name = "seekly.search.lucene.enabled", havingValue = "true")
     public <T extends SearchableEntity> SearchEngine<T> luceneSearchEngine(
-            @Qualifier("springPostgresSearchConfig") SpringPostgresSearchConfig config) throws IOException {
+            SpringPostgresSearchConfig config) throws IOException {
 
         log.info("Creating Lucene search engine for entity type: {}", config.getEntityType());
 

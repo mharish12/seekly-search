@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'application'
-    id 'org.springframework.boot' version '3.2.0'
+    id 'org.springframework.boot' version '3.5.3'
     id 'io.spring.dependency-management' version '1.1.4'
 }
 
@@ -10,13 +10,13 @@ dependencies {
     implementation project(':seekly-search-core')
     
     // Additional dependencies for examples
-    implementation 'org.springframework.boot:spring-boot-starter-web:3.2.0'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.2.0'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator:3.2.0'
+    implementation 'org.springframework.boot:spring-boot-starter-web:3.5.3'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.5.3'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator:3.5.3'
     
     // Testing
-    testImplementation 'org.springframework.boot:spring-boot-starter-test:3.2.0'
-    testImplementation 'org.springframework.boot:spring-boot-testcontainers:3.2.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:3.5.3'
+    testImplementation 'org.springframework.boot:spring-boot-testcontainers:3.5.3'
 }
 
 application {
@@ -24,7 +24,7 @@ application {
 }
 
 // Custom task to run the application
-task runApp(type: JavaExec) {
+tasks.register('runApp', JavaExec) {
     group = 'application'
     description = 'Run the examples application'
     classpath = sourceSets.main.runtimeClasspath

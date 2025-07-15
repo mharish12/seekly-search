@@ -16,7 +16,6 @@ import org.apache.lucene.store.FSDirectory;
 
 import javax.sql.DataSource;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -253,12 +252,12 @@ public class LucenePostgresSearchEngine<T extends SearchableEntity> implements S
     }
 
     @Override
-    public Optional<SearchMetrics> getSearchMetrics(String query) {
+    public Optional<SearchMetric> getSearchMetrics(String query) {
         return Optional.ofNullable(metricsTracker.getMetrics(query));
     }
 
     @Override
-    public List<SearchMetrics> getSearchMetrics(String entityType, LocalDateTime from, LocalDateTime to) {
+    public List<SearchMetric> getSearchMetrics(String entityType, LocalDateTime from, LocalDateTime to) {
         return metricsTracker.getMetrics(entityType, from, to);
     }
 
@@ -739,7 +738,7 @@ public class LucenePostgresSearchEngine<T extends SearchableEntity> implements S
     }
 
     private void trackSearchMetrics(SearchResponse<T> response, SearchOptions options) {
-        SearchMetrics metrics = SearchMetrics.builder()
+        SearchMetric metrics = SearchMetric.builder()
                 .query(response.getQuery())
                 .entityType(response.getEntityType())
                 .totalHits(response.getTotalHits())

@@ -1,13 +1,9 @@
 package com.h12.seekly.metrics;
 
-import com.h12.seekly.core.SearchMetrics;
+import com.h12.seekly.core.SearchMetric;
 import com.h12.seekly.core.SearchPerformanceStats;
 import io.micrometer.core.instrument.*;
-import io.micrometer.core.instrument.distribution.Histogram;
-import io.micrometer.core.instrument.distribution.HistogramGauges;
-import io.micrometer.core.instrument.distribution.HistogramSupport;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -237,7 +233,7 @@ public class SearchMetricsCollector {
     /**
      * Record search metrics
      */
-    public void recordSearchMetrics(SearchMetrics metrics) {
+    public void recordSearchMetrics(SearchMetric metrics) {
         if (metrics != null) {
             recordSearch(
                     metrics.getEntityType(),
